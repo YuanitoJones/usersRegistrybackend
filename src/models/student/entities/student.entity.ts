@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Email } from '../../email/entities/email.entity';
+import { Address } from '../../address/entities/address.entity';
 
 @Entity()
 export class Student {

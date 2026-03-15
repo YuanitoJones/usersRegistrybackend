@@ -28,7 +28,7 @@ export class StudentController {
     });
     const createdPhone = await this.phoneService.createPhone({
       phone: phoneNumber,
-      student_id: createdStudent,
+      student_id: createdStudent.student_id,
       phone_type: 'mobile',
       country_code: '+52',
       area_code: '633',

@@ -1,24 +1,28 @@
-import { Student } from 'src/models/student/entities/student.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Student } from '../../student/entities/student.entity';
 
 @Entity()
 export class Phone {
-  @PrimaryColumn('int')
+  @PrimaryGeneratedColumn({ name: 'phone_id' })
   phone_id: number;
 
-  // @OneToOne(() => Student, (student) => student.student_id, { cascade: true })
-  // student_id: Student;
-  @OneToOne(() => Student)
-  @JoinColumn()
-  student_id: Student;
+  @Column({ name: 'student_id' })
+  student_id: number;
+
+  @ManyToOne(() => Student, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'student_id' })
+  student: Student;
 
   @Column('varchar', { length: 30 })
   phone: string;

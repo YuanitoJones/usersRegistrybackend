@@ -29,7 +29,7 @@ export class EmailService {
       created_on: new Date(),
       updated_on: new Date(),
     });
-    createdEmail.student_id = foundstudent;
+    createdEmail.student = foundstudent;
     return this.emailRepository.save(createdEmail);
   }
 }

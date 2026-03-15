@@ -1,8 +1,8 @@
-import { Student } from 'src/models/student/entities/student.entity';
+import { Student } from '../../student/entities/student.entity';
 
 export class CreatePhoneDTO {
   phone: string;
-  student_id: Student;
+  student_id: number;
   area_code: string;
   country_code: string;
   phone_type: string;
