@@ -1,5 +1,3 @@
-import { Student } from '../../student/entities/student.entity';
-
 export class CreatePhoneDTO {
   phone: string;
   student_id: number;

@@ -2,12 +2,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToOne,
+  OneToMany,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Email } from '../../email/entities/email.entity';
 import { Address } from '../../address/entities/address.entity';
+import { Phone } from '../../phone/entities/phone.entity';
 
 @Entity()
 export class Student {
@@ -31,4 +32,15 @@ export class Student {
 
   @UpdateDateColumn()
   updated_on: Date;
+
+  //Relation purposes only
+
+  @OneToMany(() => Email, (email) => email.student)
+  emails: Email[];
+
+  @OneToMany(() => Address, (address) => address.student)
+  addresses: Address[];
+
+  @OneToMany(() => Phone, (phone) => phone.student)
+  phones: Phone[];
 }

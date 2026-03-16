@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Phone } from './entities/phone.entity';
 import { CreatePhoneDTO } from './dto/create_phone_dto';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class PhoneService {
@@ -15,6 +16,7 @@ export class PhoneService {
     return this.phoneRepository.find();
   }
 
+  @Transactional()
   async createPhone(data: CreatePhoneDTO): Promise<Phone> {
     const randomId = Number((Math.random() * 10000000).toFixed(0));
     const createdPhone = this.phoneRepository.create({

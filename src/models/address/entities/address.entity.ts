@@ -1,15 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
 
 @Entity()
 export class Address {
-  @PrimaryGeneratedColumn({ name: 'address_id' })
+  @PrimaryColumn({ name: 'address_id' })
   address_id: number;
 
   @Column({ name: 'student_id', nullable: true })

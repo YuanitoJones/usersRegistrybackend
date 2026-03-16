@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from './entities/address.entity';
+import { Transactional } from 'typeorm-transactional';
+import { CreateAddressDTO } from './dto/create-address.dto';
 
 @Injectable()
 export class AddressService {
@@ -12,5 +14,15 @@ export class AddressService {
 
   findAll(): Promise<Address[]> {
     return this.addressRepository.find();
+  }
+
+  @Transactional()
+  async createAddress(body: CreateAddressDTO): Promise<Address> {
+    try {
+      const createdAddress = await this.addressRepository.create(body);
+      return createdAddress;
+    } catch (err) {
+      throw new Error('Error creating address');
+    }
   }
 }

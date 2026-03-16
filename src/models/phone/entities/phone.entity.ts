@@ -5,14 +5,13 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
 
 @Entity()
 export class Phone {
-  @PrimaryGeneratedColumn({ name: 'phone_id' })
+  @PrimaryColumn('int', { name: 'phone_id' })
   phone_id: number;
 
   @Column({ name: 'student_id' })

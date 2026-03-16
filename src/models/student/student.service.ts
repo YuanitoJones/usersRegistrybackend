@@ -1,29 +1,69 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from './entities/student.entity';
-import { Repository } from 'typeorm';
-import { NewStudentDTO } from './dto/new_student_dto';
+import { QueryFailedError, Repository } from 'typeorm';
+import { CreateStudentDTO } from './dto/create-student.dto';
+import { PhoneService } from '../phone/phone.service';
+import { EmailService } from '../email/email.service';
+import { AddressService } from '../address/address.service';
+import { Transactional } from 'typeorm-transactional';
 
 @Injectable()
 export class StudentService {
   constructor(
     @InjectRepository(Student)
     private studentRepository: Repository<Student>,
+    private readonly phoneService: PhoneService,
+    private readonly emailService: EmailService,
+    private readonly addressService: AddressService,
   ) {}
 
   findAll(): Promise<Student[]> {
     return this.studentRepository.find();
   }
 
-  async create(studentDto: NewStudentDTO): Promise<Student> {
-    const randomId = Number((Math.random() * 10000000).toFixed(0));
-    const createdStudent = this.studentRepository.create({
-      student_id: randomId,
-      ...studentDto,
-      created_on: new Date(),
-      updated_on: new Date(),
+  @Transactional()
+  async create(studentDto: CreateStudentDTO): Promise<Student> {
+    const { email, phone, address, studentInfo } = studentDto;
+    const randomId = Number((Math.random() * 100000000).toFixed(0));
+    try {
+      const createdStudent = await this.studentRepository.insert({
+        student_id: 96431,
+        ...studentInfo,
+        created_on: new Date(),
+        updated_on: new Date(),
+      });
+      const student_id = createdStudent.identifiers[0].student_id;
+      await this.studentRepository.save(createdStudent.raw);
+      await this.phoneService.createPhone({
+        ...phone,
+        student_id,
+      });
+      await this.emailService.create({
+        ...email,
+        student_id,
+      });
+      if (address)
+        await this.addressService.createAddress({
+          ...address,
+          student_id,
+        });
+      return createdStudent.raw;
+    } catch (err) {
+      if (err instanceof QueryFailedError)
+        throw new BadRequestException(`Error validating data: ${err}`);
+      throw err;
+    }
+  }
+
+  async getStudentProfile(student_id: number) {
+    return await this.studentRepository.findOne({
+      where: { student_id: student_id },
+      relations: {
+        emails: true,
+        addresses: true,
+        phones: true,
+      },
     });
-    await this.studentRepository.save(createdStudent);
-    return createdStudent;
   }
 }
