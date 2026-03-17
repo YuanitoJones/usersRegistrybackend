@@ -19,7 +19,24 @@ export class StudentService {
   ) {}
 
   findAll(): Promise<Student[]> {
-    return this.studentRepository.find();
+    return this.studentRepository.find({
+      select: {
+        student_id: true,
+        first_name: true,
+        middle_name: true,
+        last_name: true,
+        phones: {
+          phone: true,
+        },
+        emails: {
+          email: true,
+        },
+      },
+      relations: {
+        phones: true,
+        emails: true,
+      },
+    });
   }
 
   @Transactional()

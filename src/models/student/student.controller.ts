@@ -10,8 +10,8 @@ export class StudentController {
     return this.studentService.findAll();
   }
   @Get('')
-  getProfile(@Query('student') student: number) {
-    return this.studentService.getStudentProfile(student);
+  async getProfile(@Query('studentId') studentId: number) {
+    return await this.studentService.getStudentProfile(studentId);
   }
 
   @Post('')
