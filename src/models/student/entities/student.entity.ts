@@ -12,7 +12,7 @@ import { Phone } from '../../phone/entities/phone.entity';
 
 @Entity()
 export class Student {
-  @PrimaryColumn('int')
+  @PrimaryColumn({ name: 'student_id' })
   student_id: number;
 
   @Column('varchar', { length: 45 })

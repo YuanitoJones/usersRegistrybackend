@@ -44,14 +44,14 @@ export class StudentService {
     const { email, phone, address, studentInfo } = studentDto;
     const randomId = Number((Math.random() * 100000000).toFixed(0));
     try {
-      const createdStudent = await this.studentRepository.insert({
+      const createdStudent = await this.studentRepository.create({
         student_id: randomId,
         ...studentInfo,
         created_on: new Date(),
         updated_on: new Date(),
       });
-      const student_id = createdStudent.identifiers[0].student_id;
-      await this.studentRepository.save(createdStudent.raw);
+      const savedStudent = await this.studentRepository.save(createdStudent);
+      const student_id = savedStudent.student_id;
       await this.phoneService.createPhone({
         ...phone,
         student_id,
@@ -65,7 +65,7 @@ export class StudentService {
           ...address,
           student_id,
         });
-      return createdStudent.raw;
+      return savedStudent;
     } catch (err) {
       if (err instanceof QueryFailedError)
         throw new BadRequestException(`Error validating data: ${err}`);
