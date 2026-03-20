@@ -83,4 +83,8 @@ export class StudentService {
       },
     });
   }
+
+  async deleteStudent(student_id) {
+    const result = await this.studentRepository.delete(student_id);
+  }
 }

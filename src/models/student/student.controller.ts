@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Response } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDTO } from './dto/create-student.dto';
 
@@ -16,8 +16,11 @@ export class StudentController {
 
   @Post('')
   async createStudent(@Body() studentDTO: CreateStudentDTO) {
-    console.log({ studentDTO });
     const createdStudent = await this.studentService.create(studentDTO);
     return createdStudent;
+  }
+  @Delete('')
+  async deleteStudent(@Query('student_id') student_id: number) {
+    await this.studentService.deleteStudent(student_id);
   }
 }

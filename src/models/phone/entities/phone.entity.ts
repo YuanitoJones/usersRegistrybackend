@@ -19,7 +19,7 @@ export class Phone {
   @Column({ name: 'student_id' })
   student_id: number;
 
-  @ManyToOne(() => Student, {
+  @ManyToOne(() => Student, (student) => student.phones, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'student_id' })

@@ -19,7 +19,7 @@ export class Email {
   @Column({ name: 'student_id' })
   student_id: number;
 
-  @ManyToOne(() => Student, {
+  @ManyToOne(() => Student, (student) => student.emails, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
   })

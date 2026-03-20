@@ -9,7 +9,7 @@ export class Address {
   @Column({ name: 'student_id', nullable: true })
   student_id: number;
 
-  @ManyToOne(() => Student, {
+  @ManyToOne(() => Student, (student) => student.addresses, {
     nullable: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
