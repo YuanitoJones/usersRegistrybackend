@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Address } from './entities/address.entity';
 import { Transactional } from 'typeorm-transactional';
 import { CreateAddressDTO } from './dto/create-address.dto';
+import { updateAddressDTO } from './dto/update-address.dto';
 
 @Injectable()
 export class AddressService {
@@ -24,5 +25,18 @@ export class AddressService {
     } catch (err) {
       throw new Error('Error creating address');
     }
+  }
+
+  async updateAddress(address_id: number, body: updateAddressDTO) {
+    const foundAddress = await this.addressRepository.preload({
+      address_id,
+      ...body,
+    });
+    if (!foundAddress) throw Error('Address not found');
+    return this.addressRepository.save(foundAddress);
+  }
+
+  deleteAddress(address_id) {
+    this.addressRepository.delete(address_id);
   }
 }

@@ -1,9 +1,6 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
-export class CreateAddressDTO {
-  @IsNumber()
-  student_id: number;
-
+export class updateAddressDTO {
   @IsString()
   address_line: string;
 

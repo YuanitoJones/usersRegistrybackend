@@ -8,12 +8,14 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Student } from '../../student/entities/student.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Phone {
   @PrimaryColumn('int', { name: 'phone_id' })
   phone_id: number;
 
+  @Exclude()
   @Column({ name: 'student_id' })
   student_id: number;
 
@@ -35,9 +37,11 @@ export class Phone {
   @Column('varchar', { length: 5 })
   area_code: string;
 
+  @Exclude()
   @CreateDateColumn()
   created_on: Date;
 
+  @Exclude()
   @UpdateDateColumn()
   updated_on: Date;
 }

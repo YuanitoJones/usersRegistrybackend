@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Email } from './entities/email.entity';
 import { CreateEmailDTO } from './dto/create_email_dto';
-import { Student } from '../student/entities/student.entity';
 import { Transactional } from 'typeorm-transactional';
+import { updateEmailDTO } from './dto/update_email.dto';
 
 @Injectable()
 export class EmailService {
@@ -35,5 +35,25 @@ export class EmailService {
       where: { email },
       relations: ['student'],
     });
+  }
+
+  @Transactional()
+  async updateEmail(email: string, data: updateEmailDTO): Promise<Email> {
+    const foundEmail = await this.emailRepository.findOne({ where: { email } });
+    if (!foundEmail) {
+      throw new Error('Email not found');
+    }
+    await this.emailRepository.remove(foundEmail);
+    const newMail = await this.emailRepository.create({
+      ...foundEmail,
+      ...data,
+      updated_on: new Date(),
+    });
+    return await this.emailRepository.save(newMail);
+  }
+
+  @Transactional()
+  async deleteEmail(email: string): Promise<void> {
+    await this.emailRepository.delete({ email });
   }
 }

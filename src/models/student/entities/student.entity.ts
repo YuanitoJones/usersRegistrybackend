@@ -35,12 +35,12 @@ export class Student {
 
   //Relation purposes only
 
-  @OneToMany(() => Email, (email) => email.student)
+  @OneToMany(() => Email, (email) => email.student, { cascade: true })
   emails: Email[];
 
-  @OneToMany(() => Address, (address) => address.student)
+  @OneToMany(() => Address, (address) => address.student, { cascade: true })
   addresses: Address[];
 
-  @OneToMany(() => Phone, (phone) => phone.student)
+  @OneToMany(() => Phone, (phone) => phone.student, { cascade: true })
   phones: Phone[];
 }

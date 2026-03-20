@@ -45,7 +45,7 @@ export class StudentService {
     const randomId = Number((Math.random() * 100000000).toFixed(0));
     try {
       const createdStudent = await this.studentRepository.insert({
-        student_id: 96431,
+        student_id: randomId,
         ...studentInfo,
         created_on: new Date(),
         updated_on: new Date(),

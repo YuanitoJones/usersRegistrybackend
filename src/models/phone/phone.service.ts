@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Phone } from './entities/phone.entity';
 import { CreatePhoneDTO } from './dto/create_phone_dto';
 import { Transactional } from 'typeorm-transactional';
+import { UpdatePhoneDTO } from './dto/update_phone.dto';
 
 @Injectable()
 export class PhoneService {
@@ -27,5 +28,17 @@ export class PhoneService {
     });
     await this.phoneRepository.save(createdPhone);
     return createdPhone;
+  }
+
+  async updatePhone(phone_id: number, data: UpdatePhoneDTO): Promise<Phone> {
+    const phone = await this.phoneRepository.preload({ phone_id, ...data });
+    if (!phone) {
+      throw new Error('Phone not found');
+    }
+    return this.phoneRepository.save(phone);
+  }
+
+  async deletePhone(phone_id: number): Promise<void> {
+    await this.phoneRepository.delete({ phone_id });
   }
 }
