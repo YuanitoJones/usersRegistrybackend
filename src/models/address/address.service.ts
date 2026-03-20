@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Address } from './entities/address.entity';
@@ -19,11 +19,18 @@ export class AddressService {
 
   @Transactional()
   async createAddress(body: CreateAddressDTO): Promise<Address> {
+    const randomId = Number((Math.random() * 10000000).toFixed(0));
     try {
-      const createdAddress = await this.addressRepository.create(body);
+      const createdAddress = this.addressRepository.create({
+        ...body,
+        address_id: randomId,
+      });
+      await this.addressRepository.save(createdAddress);
       return createdAddress;
     } catch (err) {
-      throw new Error('Error creating address');
+      throw new InternalServerErrorException(
+        'Could not save the address to the database',
+      );
     }
   }
 

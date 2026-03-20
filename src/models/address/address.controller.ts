@@ -22,7 +22,7 @@ export class AddressController {
 
   @Post('')
   createAddress(@Body() body: CreateAddressDTO) {
-    return this.createAddress(body);
+    return this.addressService.createAddress(body);
   }
 
   @Put('')
