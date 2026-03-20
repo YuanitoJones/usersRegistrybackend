@@ -1,6 +1,15 @@
-import { Body, Controller, Delete, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { StudentService } from './student.service';
 import { CreateStudentDTO } from './dto/create-student.dto';
+import { StudentBasicDTO } from './dto/student-base-dto';
 
 @Controller('student')
 export class StudentController {
@@ -18,6 +27,14 @@ export class StudentController {
   async createStudent(@Body() studentDTO: CreateStudentDTO) {
     const createdStudent = await this.studentService.create(studentDTO);
     return createdStudent;
+  }
+
+  @Put('')
+  async updateStudentInfo(
+    @Query('student_id') student_id: number,
+    @Body() body: StudentBasicDTO,
+  ) {
+    return await this.studentService.updateStudentInfo(student_id, body);
   }
   @Delete('')
   async deleteStudent(@Query('student_id') student_id: number) {

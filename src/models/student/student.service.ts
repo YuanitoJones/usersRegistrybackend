@@ -7,6 +7,7 @@ import { PhoneService } from '../phone/phone.service';
 import { EmailService } from '../email/email.service';
 import { AddressService } from '../address/address.service';
 import { Transactional } from 'typeorm-transactional';
+import { StudentBasicDTO } from './dto/student-base-dto';
 
 @Injectable()
 export class StudentService {
@@ -73,6 +74,15 @@ export class StudentService {
     }
   }
 
+  async updateStudentInfo(student_id: number, studentInfo: StudentBasicDTO) {
+    const student = await this.studentRepository.preload({
+      student_id,
+      ...studentInfo,
+    });
+    if (!student) throw new Error('Student not found');
+    return this.studentRepository.save(student);
+  }
+
   async getStudentProfile(student_id: number) {
     return await this.studentRepository.findOne({
       where: { student_id: student_id },
@@ -84,6 +94,7 @@ export class StudentService {
     });
   }
 
+  //The rest of schemas are deleted via db cascade
   async deleteStudent(student_id) {
     const result = await this.studentRepository.delete(student_id);
   }
